@@ -21,7 +21,7 @@ func ListPodsHandler(client kubernetes.Interface) func(ctx context.Context, requ
 		var message string
 		message = fmt.Sprintf("Total number of Pods: %d\n", len(pods.Items))
 		for _, pod := range pods.Items {
-			message += fmt.Sprintf("Pod name: %v\n", pod.Name)
+			message += fmt.Sprintf("Pod name: %v, status: %v, created: %v\n", pod.Name, pod.Status.Phase, pod.CreationTimestamp)
 		}
 
 		return mcp.NewToolResultText(message), nil
@@ -110,7 +110,7 @@ func ClusterNameHandler(kubeConfigPath string) func(ctx context.Context, request
 		if err != nil {
 			return mcp.NewToolResultText("Error getting cluster name: " + err.Error()), nil
 		}
-		
+
 		message := fmt.Sprintf("Cluster name: %s", clusterName)
 		return mcp.NewToolResultText(message), nil
 	}
